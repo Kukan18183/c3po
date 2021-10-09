@@ -1,0 +1,2 @@
+class ExtractorInvalidWordException(Exception):
+    pass

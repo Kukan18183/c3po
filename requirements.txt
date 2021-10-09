@@ -1,0 +1,11 @@
+Django==3.2.8
+django-cors-headers==3.10.0
+django-environ==0.7.0
+djangorestframework==3.12.4
+mixer==7.1.2
+pymorphy2==0.9.1
+pymorphy2-dicts-ru==2.4.417127.4579844
+pytest==6.2.5
+pytest-django==4.4.0
+pytest-freezegun==0.4.2
+pytest-mock==3.6.1
