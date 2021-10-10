@@ -2,12 +2,10 @@ import os
 
 import environ
 
-
 env = environ.Env()
 environ.Env.read_env()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB_PATH = env('DB_PATH')
 
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = int(env('DEBUG', default=0))
@@ -22,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'rest_framework',
     'api',
 ]
@@ -59,7 +58,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': DB_PATH,
+        'NAME': './dbs/db.sqlite3',
     }
 }
 
