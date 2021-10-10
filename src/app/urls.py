@@ -4,7 +4,6 @@ from django.urls import path
 from django.urls.conf import include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -13,8 +12,7 @@ schema_view = get_schema_view(
         description="",
         validators=['ssv'],
     ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
+    public=True
 )
 
 urlpatterns = [

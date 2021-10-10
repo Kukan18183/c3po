@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  c3po:
+    container_name: c3po_app
+    build: .
+    volumes:
+      - ~/.docker/volumes/c3po/c3po-dbs:/var/www/c3po/dbs:cached
+      - ~/.docker/volumes/c3po/static:/var/www/c3po/static:cached
+    ports:
+      - "8001:8000"
