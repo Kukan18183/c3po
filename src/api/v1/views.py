@@ -1,9 +1,10 @@
-from typing import Any, List, Tuple, Union
-from django.http import JsonResponse
-from rest_framework.views import APIView
+from typing import Any
+
 from app.exceptions import ExtractorInvalidWordException
-from services.extractors import (many_word_lexeme_extractor,
-                                 one_word_lexeme_extractor)
+from django.http import JsonResponse
+from rest_framework.request import Request
+from rest_framework.views import APIView
+from services.extractors import word_lexeme_extractor
 
 
 class PingPongApiView(APIView):
@@ -13,25 +14,18 @@ class PingPongApiView(APIView):
         })
 
 
-class WordExtractApiView(APIView):
+class WordLexemesExtractApiView(APIView):
     def __init__(self, **kwargs: Any) -> None:
-        self.extractors = {
-            'word': one_word_lexeme_extractor,
-            'words': many_word_lexeme_extractor,
-        }
+        self.extractor = word_lexeme_extractor
 
-    def get(self, request) -> JsonResponse:
-        if 'word' not in request.GET and 'words' not in request.GET:
+    def post(self, request: Request) -> JsonResponse:
+        if 'words' not in request.data:
             return JsonResponse({
-                'error': 'Word is empty.'
-            })
-
-        process_type = self.__get_process_type(request)
-        data = self.__get_data(request.GET[process_type])
-        extractor = self.__get_extractor(data)
+                'error': 'List of words is empty.'
+            }, status=400)
 
         try:
-            result = extractor.analyze(data)
+            result = self.extractor.extract(request.data['words'])
 
             return JsonResponse({
                 'result': result,
@@ -39,20 +33,4 @@ class WordExtractApiView(APIView):
         except ExtractorInvalidWordException as e:
             return JsonResponse({
                 'error': str(e)
-            })
-
-    def __get_data(self, request_data: str) -> Union[str, List[str]]:
-        words = request_data.split(',')
-        if len(words) == 1:
-            return words[0]
-
-        return words
-
-    def __get_process_type(self, request) -> str:
-        return 'word' if 'word' in request.GET else 'words'
-
-    def __get_extractor(self, data) -> Any:
-        if isinstance(data, str):
-            return self.extractors['word']
-
-        return self.extractors['words']
+            }, status=400)

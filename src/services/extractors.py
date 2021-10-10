@@ -4,11 +4,11 @@ import pymorphy2
 from app.exceptions import ExtractorInvalidWordException
 
 
-class ManyWordLexemeExtractor():
+class WordLexemeExtractor():
     def __init__(self) -> None:
         self.analyzer = pymorphy2.MorphAnalyzer()
 
-    def analyze(self, words: List[str]) -> Dict[str, List[str]]:
+    def extract(self, words: List[str]) -> Dict[str, List[str]]:
         self.__check(words)
         return self.__process(words)
 
@@ -42,28 +42,4 @@ class ManyWordLexemeExtractor():
         return None
 
 
-class OneWordLexemeExtractor():
-    def __init__(self) -> None:
-        self.analyzer = pymorphy2.MorphAnalyzer()
-
-    def analyze(self, word: str) -> List[str]:
-        self.__check(word)
-
-        return self.__process(word)
-
-    def __process(self, word: str) -> List[str]:
-        data = self.analyzer.parse(word)[0]
-        return [x.word for x in data.lexeme]
-
-    def __check(self, word: str) -> None:
-        if not word:
-            raise ExtractorInvalidWordException('Word is empty.')
-
-        if not isinstance(word, str):
-            raise ExtractorInvalidWordException('Word is not str.')
-
-        return None
-
-
-one_word_lexeme_extractor = OneWordLexemeExtractor()
-many_word_lexeme_extractor = ManyWordLexemeExtractor()
+word_lexeme_extractor = WordLexemeExtractor()
