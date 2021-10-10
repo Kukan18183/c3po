@@ -2,11 +2,11 @@ import json
 import random
 import string
 
-from django.test.client import Client
 from mixer.backend.django import mixer
+from rest_framework.test import APIClient
 
 
-class DRFClient(Client):
+class DRFClient(APIClient):
     def __init__(self,
                  user=None,
                  god_mode=True,
